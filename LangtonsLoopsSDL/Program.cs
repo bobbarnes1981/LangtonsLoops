@@ -9,7 +9,7 @@ namespace LangtonsLoopsSDL
     {
         static void Main(string[] args)
         {
-            new Viewer(128, 96, 5, 0.1f).Run();
+            new Viewer(32, 24, 20, 0.1f).Run();
         }
     }
 }

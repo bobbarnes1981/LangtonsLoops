@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using LangtonsLoopsLibrary;
 using SdlDotNet.Core;
+using SdlDotNet.Input;
 using SdlDotNet.Graphics;
 
 namespace LangtonsLoopsSDL
@@ -27,6 +28,8 @@ namespace LangtonsLoopsSDL
 
         private int m_height;
 
+        private bool m_running;
+
         public Viewer(int gridWidth, int gridHeight, int scale, float step)
         {
             m_grid = new Grid(gridWidth, gridHeight);
@@ -34,6 +37,7 @@ namespace LangtonsLoopsSDL
             m_yScale = scale;
             m_width = gridWidth * m_xScale;
             m_height = gridHeight * m_yScale;
+            m_running = false;
         }
 
         public void Run()
@@ -42,6 +46,9 @@ namespace LangtonsLoopsSDL
             m_video = Video.SetVideoMode(m_width, m_height, 32, false, false, false, true);
             Events.Quit += new EventHandler<QuitEventArgs>(ApplicationQuitEventHandler);
             Events.Tick += new EventHandler<TickEventArgs>(ApplicationTickEventHandler);
+            Events.KeyboardDown += new EventHandler<KeyboardEventArgs>(ApplicationKeyboardEventHandler);
+            Events.KeyboardUp += new EventHandler<KeyboardEventArgs>(ApplicationKeyboardEventHandler);
+            Events.MouseButtonDown += new EventHandler<MouseButtonEventArgs>(ApplicationMouseEventHandler);
             Events.Run();
         }
 
@@ -50,7 +57,10 @@ namespace LangtonsLoopsSDL
             m_elapsed += args.SecondsElapsed;
             if (m_elapsed > m_step)
             {
-                m_grid.Step();
+                if (m_running)
+                {
+                    m_grid.Step();
+                }
                 m_elapsed -= m_step;
             }
             for (int y = 0; y < m_grid.Cells.GetLength(1); y++)
@@ -93,6 +103,28 @@ namespace LangtonsLoopsSDL
                 }
             }
             m_video.Update();
+        }
+
+        private void ApplicationKeyboardEventHandler(object sender, KeyboardEventArgs args)
+        {
+            switch(args.Key)
+            {
+                case Key.Return:
+                    if (args.Down)
+                    {
+                        m_running = !m_running;
+                        Console.WriteLine(m_running);
+                    }
+                    break;
+            }
+        }
+
+        private void ApplicationMouseEventHandler(object sender, MouseButtonEventArgs args)
+        {
+            if (args.Button == MouseButton.PrimaryButton && args.ButtonPressed)
+            {
+                m_grid.Cells[args.Position.X / m_xScale, args.Position.Y / m_yScale].RotateState();
+            }
         }
 
         private void ApplicationQuitEventHandler(object sender, QuitEventArgs args)
