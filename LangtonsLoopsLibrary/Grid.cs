@@ -47,16 +47,21 @@ namespace LangtonsLoopsLibrary
             {
                 neighbourhood[1] = m_cells[x - 1, y].State;
             }
-            if (y + 1 < m_width)
+            if (y + 1 < m_height)
             {
                 neighbourhood[2] = m_cells[x, y + 1].State;
             }
-            if (x + 1 < m_height)
+            if (x + 1 < m_width)
             {
                 neighbourhood[3] = m_cells[x + 1, y].State;
             }
 
             return neighbourhood;
+        }
+
+        public Cell[,] Cells
+        {
+            get { return m_cells; }
         }
     }
 }
