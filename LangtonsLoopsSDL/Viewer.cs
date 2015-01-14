@@ -60,6 +60,7 @@ namespace LangtonsLoopsSDL
                 if (m_running)
                 {
                     m_grid.Step();
+                    m_running = false; // debugging
                 }
                 m_elapsed -= m_step;
             }

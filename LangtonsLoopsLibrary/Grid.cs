@@ -39,6 +39,7 @@ namespace LangtonsLoopsLibrary
                     }
                     catch(Exception e)
                     {
+                        // debugging
                         Console.WriteLine("{0},{1} {2}", x, y, e.Message);
                     }
                 }
