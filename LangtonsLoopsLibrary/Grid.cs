@@ -5,12 +5,15 @@ using System.Text;
 
 namespace LangtonsLoopsLibrary
 {
+    public delegate string GetNeighbourhood(int x, int y);
+
     public class Grid
     {
         private int m_width;
         private int m_height;
         private int[,] m_cells;
         private Table m_table;
+        private Dictionary<Neighbourhood, GetNeighbourhood> m_fetchneighbourhood;
 
         public Grid(Table table, int width, int height)
         {
@@ -25,6 +28,11 @@ namespace LangtonsLoopsLibrary
                     m_cells[x, y] = 0;
                 }
             }
+
+            m_fetchneighbourhood = new Dictionary<Neighbourhood, GetNeighbourhood>
+            {
+                { Neighbourhood.VonNeumann, GetVonNeumannNeighbourhood }
+            };
         }
 
         public void Load(int xOffset, int yOffset, int[,] data)
@@ -41,21 +49,11 @@ namespace LangtonsLoopsLibrary
         public void Step()
         {
             int[,] nextCells = new int[m_width, m_height];
-            for (int x = 0; x < m_width; x++)
+            for (int x = 1; x < m_width-1; x++)
             {
-                for (int y = 0; y < m_height; y++)
+                for (int y = 1; y < m_height-1; y++)
                 {
-                    string neighbourhood;
-                    switch (m_table.Neighbourhood)
-                    {
-                        case Neighbourhood.VonNeumann:
-                            neighbourhood = GetVonNeumannNeighbourhood(x, y);
-                            break;
-                        default:
-                            throw new Exception("Unhandled neighbourhood");
-                    }
-
-                    nextCells[x, y] = m_table.Next(m_cells[x, y], neighbourhood);
+                    nextCells[x, y] = m_table.Next(m_cells[x, y], m_fetchneighbourhood[m_table.Neighbourhood](x, y));
                 }
             }
 
@@ -70,25 +68,7 @@ namespace LangtonsLoopsLibrary
         /// <returns></returns>
         public string GetVonNeumannNeighbourhood(int x, int y)
         {
-            int[] output = new int[4];
-            if (y - 1 > -1)
-            {
-                output[0] = m_cells[x, y - 1];
-            }
-            if (x + 1 < m_width)
-            {
-                output[1] = m_cells[x + 1, y];
-            }
-            if (y + 1 < m_height)
-            {
-                output[2] = m_cells[x, y + 1];
-            }
-            if (x - 1 > -1)
-            {
-                output[3] = m_cells[x - 1, y];
-            }
-
-            return string.Join("", output);
+            return string.Format("{0}{1}{2}{3}", m_cells[x, y - 1], m_cells[x + 1, y], m_cells[x, y + 1], m_cells[x - 1, y]);
         }
 
         public void RotateState(int x, int y)

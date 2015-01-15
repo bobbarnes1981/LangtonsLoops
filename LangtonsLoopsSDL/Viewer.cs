@@ -73,25 +73,25 @@ namespace LangtonsLoopsSDL
         private void ApplicationTickEventHandler(object sender, TickEventArgs args)
         {
             m_elapsed += args.SecondsElapsed;
+            Video.WindowCaption = string.Format("Langton's Loops [FPS: {0} | Elapsed: {1}]", args.Fps, m_elapsed);
             if (m_elapsed > m_step)
             {
                 if (m_running)
                 {
                     m_grid.Step();
                 }
+
                 m_elapsed -= m_step;
             }
+
             for (int y = 0; y < m_grid.Cells.GetLength(1); y++)
             {
                 for (int x = 0; x < m_grid.Cells.GetLength(0); x++)
                 {
-                    int xa = x * m_xScale;
-                    int xb = (x * m_xScale) + m_xScale;
-                    int ya = y * m_yScale;
-                    int yb = (y * m_yScale) + m_yScale;
-                    m_video.Draw(new SdlDotNet.Graphics.Primitives.Box(new Point(xa, ya), new Point(xb, yb)), m_colors[m_grid.Cells[x, y]], false, true);
+                    m_video.Draw(new SdlDotNet.Graphics.Primitives.Box(new Point(x * m_xScale, y * m_yScale), new Size(m_xScale, m_yScale)), m_colors[m_grid.Cells[x, y]], false, true);
                 }
             }
+
             m_video.Update();
         }
 
