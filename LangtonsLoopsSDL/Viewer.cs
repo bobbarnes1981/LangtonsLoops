@@ -32,7 +32,7 @@ namespace LangtonsLoopsSDL
 
         public Viewer(int gridWidth, int gridHeight, int scale, float step)
         {
-            m_grid = new Grid(gridWidth, gridHeight, 8);
+            m_grid = new Grid(gridWidth, gridHeight, new Table("langtonsloops.table"));
             m_xScale = scale;
             m_yScale = scale;
             m_width = gridWidth * m_xScale;
