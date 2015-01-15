@@ -18,7 +18,7 @@ namespace LangtonsLoopsSDL
 
         private float m_elapsed;
 
-        private float m_step = 0.02f;
+        private float m_step;
 
         private int m_xScale;
 
@@ -30,13 +30,14 @@ namespace LangtonsLoopsSDL
 
         private bool m_running;
 
-        public Viewer(int gridWidth, int gridHeight, int scale, float step)
+        public Viewer(Table table, int gridWidth, int gridHeight, int scale, float step)
         {
-            m_grid = new Grid(gridWidth, gridHeight, new Table("langtonsloops.table"));
+            m_grid = new Grid(table, gridWidth, gridHeight);
             m_xScale = scale;
             m_yScale = scale;
             m_width = gridWidth * m_xScale;
             m_height = gridHeight * m_yScale;
+            m_step = step;
             m_running = false;
         }
 
@@ -57,6 +58,18 @@ namespace LangtonsLoopsSDL
             Events.Run();
         }
 
+        private Color[] m_colors = new Color[]
+        {
+            Color.Black,
+            Color.Blue,
+            Color.Red,
+            Color.GreenYellow,
+            Color.Yellow,
+            Color.Fuchsia,
+            Color.White,
+            Color.Aqua,
+        };
+
         private void ApplicationTickEventHandler(object sender, TickEventArgs args)
         {
             m_elapsed += args.SecondsElapsed;
@@ -65,7 +78,6 @@ namespace LangtonsLoopsSDL
                 if (m_running)
                 {
                     m_grid.Step();
-                    m_running = false; // debugging
                 }
                 m_elapsed -= m_step;
             }
@@ -77,35 +89,7 @@ namespace LangtonsLoopsSDL
                     int xb = (x * m_xScale) + m_xScale;
                     int ya = y * m_yScale;
                     int yb = (y * m_yScale) + m_yScale;
-                    Color color = Color.Gray;
-                    switch (m_grid.Cells[x, y])
-                    {
-                        case 0:
-                            color = Color.Black;
-                            break;
-                        case 1:
-                            color = Color.Blue;
-                            break;
-                        case 2:
-                            color = Color.Red;
-                            break;
-                        case 3:
-                            color = Color.GreenYellow;
-                            break;
-                        case 4:
-                            color = Color.Yellow;
-                            break;
-                        case 5:
-                            color = Color.Fuchsia;
-                            break;
-                        case 6:
-                            color = Color.White;
-                            break;
-                        case 7:
-                            color = Color.Aqua;
-                            break;
-                    }
-                    m_video.Draw(new SdlDotNet.Graphics.Primitives.Box(new Point(xa, ya), new Point(xb, yb)), color, false, true);
+                    m_video.Draw(new SdlDotNet.Graphics.Primitives.Box(new Point(xa, ya), new Point(xb, yb)), m_colors[m_grid.Cells[x, y]], false, true);
                 }
             }
             m_video.Update();
@@ -119,7 +103,6 @@ namespace LangtonsLoopsSDL
                     if (args.Down)
                     {
                         m_running = !m_running;
-                        Console.WriteLine(m_running);
                     }
                     break;
             }

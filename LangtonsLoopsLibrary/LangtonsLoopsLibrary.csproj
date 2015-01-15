@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions.cs" />
     <Compile Include="Grid.cs" />
     <Compile Include="Neighbourhood.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

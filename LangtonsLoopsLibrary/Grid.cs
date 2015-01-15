@@ -12,7 +12,7 @@ namespace LangtonsLoopsLibrary
         private int[,] m_cells;
         private Table m_table;
 
-        public Grid(int width, int height, Table table)
+        public Grid(Table table, int width, int height)
         {
             m_width = width;
             m_height = height;
@@ -41,7 +41,6 @@ namespace LangtonsLoopsLibrary
         public void Step()
         {
             int[,] nextCells = new int[m_width, m_height];
-
             for (int x = 0; x < m_width; x++)
             {
                 for (int y = 0; y < m_height; y++)
@@ -71,41 +70,25 @@ namespace LangtonsLoopsLibrary
         /// <returns></returns>
         public string GetVonNeumannNeighbourhood(int x, int y)
         {
-            string neighbourhood = "";
+            int[] output = new int[4];
             if (y - 1 > -1)
             {
-                neighbourhood += m_cells[x, y - 1];
-            }
-            else
-            {
-                neighbourhood += "0";
+                output[0] = m_cells[x, y - 1];
             }
             if (x + 1 < m_width)
             {
-                neighbourhood += m_cells[x + 1, y];
-            }
-            else
-            {
-                neighbourhood += "0";
+                output[1] = m_cells[x + 1, y];
             }
             if (y + 1 < m_height)
             {
-                neighbourhood += m_cells[x, y + 1];
-            }
-            else
-            {
-                neighbourhood += "0";
+                output[2] = m_cells[x, y + 1];
             }
             if (x - 1 > -1)
             {
-                neighbourhood += m_cells[x - 1, y];
-            }
-            else
-            {
-                neighbourhood += "0";
+                output[3] = m_cells[x - 1, y];
             }
 
-            return neighbourhood;
+            return string.Join("", output);
         }
 
         public void RotateState(int x, int y)

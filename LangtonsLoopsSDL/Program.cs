@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LangtonsLoopsLibrary;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,7 +11,10 @@ namespace LangtonsLoopsSDL
     {
         static void Main(string[] args)
         {
-            Viewer v = new Viewer(32, 24, 20, 0.1f);
+            int width = 128;
+            int height = 96;
+
+            Viewer v = new Viewer(new Table("langtonsloops.table"), width, height, 5, 0.1f);
 
             string[] file = File.ReadAllLines("langtonsloops.genome");
             int[,] data = new int[file[0].Length, file.Length];
@@ -22,7 +26,8 @@ namespace LangtonsLoopsSDL
                 }
             }
 
-            v.Load(2, 2, data);
+            v.Load(width/2, height/2, data);
+
             v.Run();
         }
     }

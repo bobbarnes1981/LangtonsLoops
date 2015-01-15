@@ -33,7 +33,16 @@ namespace LangtonsLoopsLibrary
                 {
                     m_table.Add(state, new Dictionary<string, int>());
                 }
-                m_table[state].Add(input, next);
+
+                // assume symetry in x and y axis
+                for (int j = 0; j < input.Length; j++)
+                {
+                    if (!m_table[state].ContainsKey(input))
+                    {
+                        m_table[state].Add(input, next);
+                    }
+                    input = input.RotateR();
+                }
             }
         }
 
@@ -49,8 +58,12 @@ namespace LangtonsLoopsLibrary
 
         public int Next(int current, string input)
         {
-            // todo: rotation
-            return m_table[current][input];
+            if (m_table.ContainsKey(current) && m_table[current].ContainsKey(input))
+            {
+                return m_table[current][input];
+            }
+
+            throw new Exception(string.Format("No match in table for {0} {1}", current, input));
         }
     }
 }
