@@ -32,12 +32,17 @@ namespace LangtonsLoopsSDL
 
         public Viewer(int gridWidth, int gridHeight, int scale, float step)
         {
-            m_grid = new Grid(gridWidth, gridHeight);
+            m_grid = new Grid(gridWidth, gridHeight, 8);
             m_xScale = scale;
             m_yScale = scale;
             m_width = gridWidth * m_xScale;
             m_height = gridHeight * m_yScale;
             m_running = false;
+        }
+
+        public void Load(int x, int y, int[,] data)
+        {
+            m_grid.Load(x, y, data);
         }
 
         public void Run()
@@ -73,7 +78,7 @@ namespace LangtonsLoopsSDL
                     int ya = y * m_yScale;
                     int yb = (y * m_yScale) + m_yScale;
                     Color color = Color.Gray;
-                    switch (m_grid.Cells[x, y].State)
+                    switch (m_grid.Cells[x, y])
                     {
                         case 0:
                             color = Color.Black;
@@ -124,7 +129,7 @@ namespace LangtonsLoopsSDL
         {
             if (args.Button == MouseButton.PrimaryButton && args.ButtonPressed)
             {
-                m_grid.Cells[args.Position.X / m_xScale, args.Position.Y / m_yScale].RotateState();
+                m_grid.RotateState(args.Position.X / m_xScale, args.Position.Y / m_yScale);
             }
         }
 
