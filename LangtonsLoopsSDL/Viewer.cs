@@ -74,6 +74,7 @@ namespace LangtonsLoopsSDL
         {
             m_elapsed += args.SecondsElapsed;
             Video.WindowCaption = string.Format("Langton's Loops [FPS: {0} | Elapsed: {1}]", args.Fps, m_elapsed);
+
             if (m_elapsed > m_step)
             {
                 if (m_running)
@@ -81,18 +82,18 @@ namespace LangtonsLoopsSDL
                     m_grid.Step();
                 }
 
+                for (int y = 0; y < m_grid.Cells.GetLength(1); y++)
+                {
+                    for (int x = 0; x < m_grid.Cells.GetLength(0); x++)
+                    {
+                        m_video.Draw(new SdlDotNet.Graphics.Primitives.Box(new Point(x * m_xScale, y * m_yScale), new Size(m_xScale, m_yScale)), m_colors[m_grid.Cells[x, y]], false, true);
+                    }
+                }
+
+                m_video.Update();
+
                 m_elapsed -= m_step;
             }
-
-            for (int y = 0; y < m_grid.Cells.GetLength(1); y++)
-            {
-                for (int x = 0; x < m_grid.Cells.GetLength(0); x++)
-                {
-                    m_video.Draw(new SdlDotNet.Graphics.Primitives.Box(new Point(x * m_xScale, y * m_yScale), new Size(m_xScale, m_yScale)), m_colors[m_grid.Cells[x, y]], false, true);
-                }
-            }
-
-            m_video.Update();
         }
 
         private void ApplicationKeyboardEventHandler(object sender, KeyboardEventArgs args)

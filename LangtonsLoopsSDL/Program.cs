@@ -14,7 +14,7 @@ namespace LangtonsLoopsSDL
             int width = 128;
             int height = 96;
 
-            Viewer v = new Viewer(new Table("langtonsloops.table"), width, height, 5, 0.15f);
+            Viewer v = new Viewer(new Table("langtonsloops.table"), width, height, 5, 0.1f);
 
             string[] file = File.ReadAllLines("langtonsloops.genome");
             int[,] data = new int[file[0].Length, file.Length];

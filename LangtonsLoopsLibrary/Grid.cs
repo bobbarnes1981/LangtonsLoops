@@ -53,11 +53,16 @@ namespace LangtonsLoopsLibrary
             {
                 for (int y = 1; y < m_height-1; y++)
                 {
-                    nextCells[x, y] = m_table.Next(m_cells[x, y], m_fetchneighbourhood[m_table.Neighbourhood](x, y));
+                    nextCells[x, y] = Step(x, y);
                 }
             }
 
             m_cells = nextCells;
+        }
+
+        public int Step(int x, int y)
+        {
+            return m_table.Next(m_cells[x, y], m_fetchneighbourhood[m_table.Neighbourhood](x, y));
         }
 
         /// <summary>
